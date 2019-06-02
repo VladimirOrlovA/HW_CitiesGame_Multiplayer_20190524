@@ -115,6 +115,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CitiesGame.h" />
+    <ClInclude Include="CitiesModel.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CitiesModel.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="CitiesGame.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="SourceFiles\usedCities.csv" />
+    <None Include="SourceFiles\users.csv" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
