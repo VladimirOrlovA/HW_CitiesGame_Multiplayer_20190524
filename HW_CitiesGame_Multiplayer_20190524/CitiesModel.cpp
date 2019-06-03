@@ -9,10 +9,8 @@ CitiesModel::CitiesModel(string citiesDir) {
 }
 int CitiesModel::checkCity(string answerCity) {
 	try {
-		if (cities.find(answerCity) == end(cities) && oneOrMult == 1)
-			throw exception("\nГород не найден. ");
 		if (cities.find(answerCity) == end(cities))
-			throw exception("\nГород не найден. ");
+			throw exception("\n\n  Город не найден. ");
 
 		vector<string> usedCities;
 		fstream file(dir + "\\usedCities.csv", ios::in); //////????????????????
@@ -34,7 +32,7 @@ int CitiesModel::checkCity(string answerCity) {
 		//usedCities;
 		if (find(begin(usedCities), end(usedCities), answerCity)
 			!= end(usedCities))
-			throw exception("Город уже использовался! ");
+			throw exception("\n\nГород уже использовался! ");
 		//Алматы Тамбов
 		char c = *((usedCities.end() - 1)->end() - 1);
 		if (c == 'ь' || c == 'ы' || c == 'й' ||
@@ -43,7 +41,7 @@ int CitiesModel::checkCity(string answerCity) {
 
 		c -= 32;
 		if (answerCity[0] != c) {
-			string res = "Буквы не совпадают, должна быть буква ";
+			string res = "\n\nБуквы не совпадают, должна быть буква - ";
 			res.push_back(c);
 			throw exception(res.c_str());
 		}
@@ -56,11 +54,11 @@ int CitiesModel::checkCity(string answerCity) {
 	}
 	catch (exception &e) {
 		if (oneOrMult == 1) {
-			cout << e.what() << "К сожалению Вы проиграли.\n\n";
+			cout << e.what() << "\n\n !!! К сожалению Вы проиграли !!! \n\n";
 			return 1;
 		}
 		else {
-			cout << e.what() << "Вы выбываете из игры.\n\n";
+			cout << e.what() << "\n\n!!! Вы выбываете из игры. !!! \n\n";
 		}
 	}
 }

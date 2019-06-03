@@ -25,6 +25,8 @@ CitiesGame::CitiesGame(string dir)
 }
 void CitiesGame::mainMenu(int choice)
 {
+	Sleep(2000);
+	system("cls");
 	while (choice)
 	{
 		if (choice != 4) {
@@ -39,19 +41,22 @@ void CitiesGame::mainMenu(int choice)
 		switch (choice)
 		{
 		case 1:
+			system("cls");
 			cin.get();
 			multiPlayer();
 			break;
 		case 2:
+			system("cls");
 			singlePlayer();
 			break;
 		case 3:
+			system("cls");
 			info();
 			break;
 		case 4:
+			system("cls");
 			choice = 0;
 			clearFiles();
-			system("cls");
 			cout << "\n\nСпасибо! До_свидания :) \n\n";
 			exit(0);
 		default:
@@ -77,7 +82,8 @@ void CitiesGame::menuAfterPlay()
 		switch (choice)
 		{
 		case 1:
-			return;
+			start();
+			//return;
 			break;
 		case 2:
 			system("cls");
@@ -121,7 +127,7 @@ void CitiesGame::players()
 		listOfPlayers.open(game.getDir() + "\\listOfPlayers.csv", ios::out | ios::trunc);
 	}
 
-	cout << "\n\nВведите свое имя для начала игры!\n";
+	cout << "\n\nВведите свое имя для начала игры! \n\n-> ";
 	cin.get();
 	getline(cin, name);
 	listOfPlayers.close();
@@ -151,8 +157,10 @@ void CitiesGame::start() {
 					char c = tmp[tmp.size() - 1];
 					if (c == '1')//&&userName == name)
 						flag = 1;
-					if (c == '1')
+					if (c == '1') {
+						system("cls");
 						cout << "Ходит " << name << endl;
+					}
 					players.push_back(make_pair(name, c));
 				}
 			}
@@ -170,17 +178,21 @@ void CitiesGame::start() {
 			else cout << "Введите первый город \n-> ";
 			string answer;
 			getline(cin, answer);
-			try {
-				game.checkCity(answer);
-				choice = 1;
-				if (game.checkCity(answer) == 1)
-					menuAfterPlay();
-			}
-			catch (exception&e) {
-				cout << e.what();
-				system("pause");
-				system("cls");
-			}
+			system("cls");
+			//try {
+			//	game.checkCity(answer);
+			//	//choice = 1;
+			//	if (game.checkCity(answer) == 1)
+			//		menuAfterPlay();
+			//}
+			//catch (exception&e) {
+			//	//cout << e.what();
+			//	system("pause");
+			//	system("cls");
+			//}
+			//game.checkCity(answer);
+			if (game.checkCity(answer) == 1)
+				mainMenu(1); //menuAfterPlay();
 		}
 		//считываем текущих игроков
 		fstream listOfPlayers(game.getDir() + "\\listOfPlayers.csv");
