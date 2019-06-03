@@ -26,7 +26,7 @@ int CitiesModel::checkCity(string answerCity) {
 			file.open(dir + "\\usedCities.csv", ios::out);
 			file << answerCity;
 			file.close();
-			return 4;
+			return 2;
 		}
 		//answerCity;
 		//usedCities;

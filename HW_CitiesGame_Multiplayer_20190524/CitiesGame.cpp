@@ -42,7 +42,6 @@ void CitiesGame::mainMenu(int choice)
 		{
 		case 1:
 			system("cls");
-			cin.get();
 			multiPlayer();
 			break;
 		case 2:
@@ -113,6 +112,7 @@ void CitiesGame::singlePlayer()
 void CitiesGame::players()
 {
 	fstream listOfPlayers(game.getDir() + "\\listOfPlayers.csv", ios::in); ///////???????????????
+	int counter = 0;
 	string name;
 	if (game.getOneOrMult() != 1) {
 		getline(listOfPlayers, name);
@@ -132,10 +132,13 @@ void CitiesGame::players()
 	getline(cin, name);
 	listOfPlayers.close();
 	listOfPlayers.open(game.getDir() + "\\listOfPlayers.csv", ios::out | ios::app);
-	if (game.getOneOrMult() == 1)
+	if (game.getOneOrMult() == 1 || cntPlayers == 0) {
 		listOfPlayers << name << ";1\n";
-	else
+		//cntPlayers = 1;
+	}	
+	if (cntPlayers!=0)
 		listOfPlayers << name << ";0\n";
+
 	PlayerName = name;
 	listOfPlayers.close();
 	start();
@@ -146,25 +149,25 @@ void CitiesGame::start() {
 		vector<pair<string, char>> players;
 		int flag = 0;
 		while (flag != 1) {
-			fstream users(game.getDir() + "\\listOfPlayers.csv");
+			fstream listOfPlayers(game.getDir() + "\\listOfPlayers.csv");
 			players.clear();
-			while (!users.eof()) {
+			while (!listOfPlayers.eof()) {
 				string tmp;
-				getline(users, tmp);
+				getline(listOfPlayers, tmp);
 				if (tmp.size() > 0) {
 					//петя;0
 					string name = tmp.substr(0, tmp.size() - 2);
 					char c = tmp[tmp.size() - 1];
-					if (c == '1')//&&userName == name)
+					if (c == '1' && PlayerName == name)
 						flag = 1;
 					if (c == '1') {
-						system("cls");
-						cout << "Ходит " << name << endl;
+						if (game.getOneOrMult() != 1)
+							cout << "Ходит " << name << endl;
 					}
 					players.push_back(make_pair(name, c));
 				}
 			}
-			users.close();
+			listOfPlayers.close();
 			Sleep(1000);
 			system("cls");
 		}
@@ -179,20 +182,9 @@ void CitiesGame::start() {
 			string answer;
 			getline(cin, answer);
 			system("cls");
-			//try {
-			//	game.checkCity(answer);
-			//	//choice = 1;
-			//	if (game.checkCity(answer) == 1)
-			//		menuAfterPlay();
-			//}
-			//catch (exception&e) {
-			//	//cout << e.what();
-			//	system("pause");
-			//	system("cls");
-			//}
-			//game.checkCity(answer);
 			if (game.checkCity(answer) == 1)
-				mainMenu(1); //menuAfterPlay();
+				mainMenu(1);
+			choice = 1;
 		}
 		//считываем текущих игроков
 		fstream listOfPlayers(game.getDir() + "\\listOfPlayers.csv");
