@@ -8,7 +8,7 @@
 using namespace std;
 
 class CitiesModel {
-	map<string,string> cities;
+	map<string, string> cities;
 	string dir;
 	int oneOrMult;
 	/*int endGame=0;
@@ -24,7 +24,7 @@ public:
 	//int getCntPlayers() const { return this->cntPlayers; };
 
 	CitiesModel(string citiesDir);
-	string getDir()const;
+	string getDir()const { return dir; };
 	int checkCity(string answerCity);
 
 private:

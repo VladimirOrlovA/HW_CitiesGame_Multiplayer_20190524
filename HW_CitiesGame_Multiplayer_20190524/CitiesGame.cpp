@@ -10,7 +10,7 @@ CitiesGame::CitiesGame(string dir)
 	int x = 0;
 	for (size_t i = 0; i < r; i++)
 	{
-		cout << "Добро пожаловать в игру ГОРОДА!\n\n";
+		cout << "\n\n -= Добро пожаловать в игру ГОРОДА! =- \n\n";
 		cout << "Загрузка ";
 		for (size_t i = 0; i < x; i++)
 		{
@@ -21,14 +21,14 @@ CitiesGame::CitiesGame(string dir)
 		if (x == 4) x = 0;
 		system("cls");
 	}
-	menu(1);
+	checkFiles(dir);
 }
-void CitiesGame::menu(int choice)
+void CitiesGame::mainMenu(int choice)
 {
 	while (choice)
 	{
 		if (choice != 4) {
-			cout << "\n\nГлавное меню:\n\n" 
+			cout << "\n\n -= Главное меню =- \n\n"
 				<< "1. Игра по сети\n"
 				<< "2. Игра одиночная - тренировка\n"
 				<< "3. Информация об игре\n"
@@ -50,6 +50,7 @@ void CitiesGame::menu(int choice)
 			break;
 		case 4:
 			choice = 0;
+			clearFiles();
 			system("cls");
 			cout << "\n\nСпасибо! До_свидания :) \n\n";
 			exit(0);
@@ -80,11 +81,11 @@ void CitiesGame::menuAfterPlay()
 			break;
 		case 2:
 			system("cls");
-			menu(1);
+			mainMenu(1);
 			break;
 		case 3:
 			system("cls");
-			menu(4);
+			mainMenu(4);
 			break;
 		default:
 			cout << "\nОшибочный ввод номера меню. Попробуйте еще раз...\n";
@@ -100,56 +101,46 @@ void CitiesGame::multiPlayer()
 void CitiesGame::singlePlayer()
 {
 	game.setOneOrMult(1);
+	cntPlayers = 1;
 	players();
 }
 void CitiesGame::players()
 {
-	fstream users(game.getDir() + "\\users.csv", ios::in);
-	try {
-		if (!users)
-			throw exception
-			("\n\n (!) Ошибка: Файл со списком игроков - ""users.csv"" поврежден или отсутствует.\nПереустановите игру.\n\n");
-	}
-	catch (exception&e) {
-		cout << e.what();
-		system("pause");
-		exit(0);
-	}
+	fstream listOfPlayers(game.getDir() + "\\listOfPlayers.csv", ios::in); ///////???????????????
 	string name;
 	if (game.getOneOrMult() != 1) {
-		getline(users, name);
-		while (!users.eof()) {
-			getline(users, name);
+		getline(listOfPlayers, name);
+		while (!listOfPlayers.eof()) {
+			getline(listOfPlayers, name);
 			cntPlayers++;
 		}
 		cout << "\nВ игре участвует " << cntPlayers << " игроков!";
 	}
 	else {
-		users.close();
-		users.open(game.getDir() + "\\users.csv", ios::out | ios::trunc);
-		cin.get();
+		listOfPlayers.close();
+		listOfPlayers.open(game.getDir() + "\\listOfPlayers.csv", ios::out | ios::trunc);
 	}
-	cout << "\n\nВведите свое имя для начала игры!\n";
 
+	cout << "\n\nВведите свое имя для начала игры!\n";
+	cin.get();
 	getline(cin, name);
-	users.close();
-	users.open(game.getDir() + "\\users.csv", ios::out | ios::app);
-	if (cntPlayers == 0)
-		users << name << ";1\n";
+	listOfPlayers.close();
+	listOfPlayers.open(game.getDir() + "\\listOfPlayers.csv", ios::out | ios::app);
+	if (game.getOneOrMult() == 1)
+		listOfPlayers << name << ";1\n";
 	else
-		users << name << ";0\n";
-	userName = name;
-	users.close();
+		listOfPlayers << name << ";0\n";
+	PlayerName = name;
+	listOfPlayers.close();
 	start();
 }
-
 void CitiesGame::start() {
 
 	while (1) {
 		vector<pair<string, char>> players;
 		int flag = 0;
 		while (flag != 1) {
-			fstream users(game.getDir() + "\\users.csv");
+			fstream users(game.getDir() + "\\listOfPlayers.csv");
 			players.clear();
 			while (!users.eof()) {
 				string tmp;
@@ -172,15 +163,17 @@ void CitiesGame::start() {
 		//Значит мы ходим
 		int choice = 0;
 		while (choice != 1) {
-			cout << "Последний город " << getLastCity() << endl;
-			cout << "Введите город на букву " << getLastLetter() << endl;
+			if (!empty(getLastCity())) {
+				cout << "Последний город " << getLastCity() << endl;
+				cout << "Введите город на букву " << getLastLetter() << "\n-> ";
+			}
+			else cout << "Введите первый город \n-> ";
 			string answer;
 			getline(cin, answer);
 			try {
 				game.checkCity(answer);
 				choice = 1;
-				//if (game.checkCity(answer) == 1 &&  menuChoice==2) //game.getOneOrMult() == 1)
-				if (game.getOneOrMult() == 1)
+				if (game.checkCity(answer) == 1)
 					menuAfterPlay();
 			}
 			catch (exception&e) {
@@ -190,12 +183,12 @@ void CitiesGame::start() {
 			}
 		}
 		//считываем текущих игроков
-		fstream users(game.getDir() + "\\users.csv");
+		fstream listOfPlayers(game.getDir() + "\\listOfPlayers.csv");
 		players.clear();
 		int pos;
-		while (!users.eof()) {
+		while (!listOfPlayers.eof()) {
 			string tmp;
-			getline(users, tmp);
+			getline(listOfPlayers, tmp);
 			if (tmp.size() > 0) {
 				//петя;0
 				string name = tmp.substr(0, tmp.size() - 2);
@@ -206,17 +199,17 @@ void CitiesGame::start() {
 				players.push_back(make_pair(name, c));
 			}
 		}
-		users.close();
+		listOfPlayers.close();
 		players[pos].second = '0';
 		pos++;
 		if (pos == players.size())
 			pos = 0;
 		players[pos].second = '1';
-		users.open(game.getDir() + "\\users.csv");
+		listOfPlayers.open(game.getDir() + "\\listOfPlayers.csv");
 		for (auto&i : players) {
-			users << i.first << ";" << i.second << endl;
+			listOfPlayers << i.first << ";" << i.second << endl;
 		}
-		users.close();
+		listOfPlayers.close();
 		system("cls");
 	}
 }
@@ -254,25 +247,55 @@ char CitiesGame::getLastLetter() {
 	return str[str.size() - 1] - 32;
 }
 string CitiesGame::getLastCity() {
-	fstream file(game.getDir() + "\\usedCities.csv");
+	fstream usedCities(game.getDir() + "\\usedCities.csv");
+
+	string str;
+	/*if (usedCities.eof())
+		cout << " - еще нет \n";*/
+	while (!usedCities.eof()) {
+		string s;
+		getline(usedCities, s);
+		//cout << s;
+		if (s.size() > 0)
+			str = s;
+	}
+	usedCities.close();
+
+	return str;
+}
+void CitiesGame::checkFiles(string &dir)
+{
+	fstream listOfCities(dir + "\\listOfCities.csv");
+	fstream listOfPlayers(dir + "\\listOfPlayers.csv");
+	fstream usedCities(dir + "\\usedCities.csv");
 	try {
-		if (!file)
+		if (!listOfCities)
+			throw exception
+			("\n\n (!) Ошибка: Файл со списком городов - listOfCities.csv \n поврежден или отсутствует.\n Переустановите игру.\n\n");
+		if (!listOfPlayers)
+			throw exception
+			("\n\n (!) Ошибка: Файл со списком игроков - users.csv поврежден или отсутствует.\nПереустановите игру.\n\n");
+		if (!usedCities)
 			throw exception
 			("\n\n (!) Ошибка: Файл со списком отыгравших городов - usedCities.csv \n поврежден или отсутствует.\n Переустановите игру.\n\n");
 	}
 	catch (exception&e) {
 		cout << e.what();
-		menu(4);
+		system("pause");
+		exit(0);
 	}
-	string str;
-	while (!file.eof()) {
-		string s;
-		getline(file, s);
-		//cout << s;
-		if (s.size() > 0)
-			str = s;
-	}
-	file.close();
+	/*listOfCities.close();
+	listOfPlayers.close();
+	usedCities.close();*/
+	mainMenu(1);
+}
+void CitiesGame::clearFiles()
+{
+	fstream listOfPlayers(game.getDir() + "\\listOfPlayers.csv", ios::out);
+	listOfPlayers.open(game.getDir() + "\\listOfPlayers.csv", ios::out | ios::trunc);
+	listOfPlayers.close();
 
-	return str;
+	fstream usedCities(game.getDir() + "\\usedCities.csv", ios::out);
+	usedCities.open(game.getDir() + "\\usedCities.csv", ios::out | ios::trunc);
+	usedCities.close();
 }

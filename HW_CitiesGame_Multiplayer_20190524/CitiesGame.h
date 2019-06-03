@@ -3,11 +3,11 @@
 
 class CitiesGame {
 	CitiesModel game;
-	string userName;
+	string PlayerName;
 	int cntPlayers=0;
 public:
 	CitiesGame(string dir);
-	void menu(int choice);
+	void mainMenu(int choice);
 	void menuAfterPlay();
 	void multiPlayer();
 	void singlePlayer();
@@ -18,4 +18,6 @@ public:
 private:
 	char getLastLetter();
 	string getLastCity();
+	void checkFiles(string &dir);
+	void clearFiles();
 };
