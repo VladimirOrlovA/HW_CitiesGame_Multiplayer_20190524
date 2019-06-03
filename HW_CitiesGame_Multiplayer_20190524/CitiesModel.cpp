@@ -72,6 +72,7 @@ int CitiesModel::checkCity(string answerCity) {
 		}
 		else {
 			cout << e.what() << "\n\n!!! Вы выбываете из игры. !!! \n\n";
+			Sleep(2000);
 			return 2;
 		}
 	}
