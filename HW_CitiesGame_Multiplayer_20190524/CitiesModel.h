@@ -11,6 +11,7 @@ class CitiesModel {
 	map<string, string> cities;
 	string dir;
 	int oneOrMult;
+	int cntExceptions = 0;
 	/*int endGame=0;
 	int cntPlayers = 0;*/
 public:

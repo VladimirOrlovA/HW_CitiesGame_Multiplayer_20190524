@@ -26,7 +26,7 @@ int CitiesModel::checkCity(string answerCity) {
 			file.open(dir + "\\usedCities.csv", ios::out);
 			file << answerCity;
 			file.close();
-			return 2;
+			return 10;
 		}
 		//answerCity;
 		//usedCities;
@@ -53,12 +53,26 @@ int CitiesModel::checkCity(string answerCity) {
 		file.close();
 	}
 	catch (exception &e) {
+		if (cntExceptions == 0) {
+			cntExceptions++;
+			return 0;
+		}
+		if (cntExceptions == 1) {
+			cout << "\n\n Хорошо начали ;) \n\n Попробуйте еще разок! \n\n";
+			cntExceptions++;
+			Sleep(2000);
+			system("cls");
+			return 0;
+		}
+
 		if (oneOrMult == 1) {
 			cout << e.what() << "\n\n !!! К сожалению Вы проиграли !!! \n\n";
-			return 1;
+			Sleep(2000);
+			return 0;
 		}
 		else {
 			cout << e.what() << "\n\n!!! Вы выбываете из игры. !!! \n\n";
+			return 2;
 		}
 	}
 }

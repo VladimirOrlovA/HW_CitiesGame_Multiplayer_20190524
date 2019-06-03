@@ -25,7 +25,7 @@ CitiesGame::CitiesGame(string dir)
 }
 void CitiesGame::mainMenu(int choice)
 {
-	Sleep(2000);
+	clearFiles();
 	system("cls");
 	while (choice)
 	{
@@ -55,8 +55,9 @@ void CitiesGame::mainMenu(int choice)
 		case 4:
 			system("cls");
 			choice = 0;
-			clearFiles();
+			//clearFiles();
 			cout << "\n\nСпасибо! До_свидания :) \n\n";
+			Sleep(2000);
 			exit(0);
 		default:
 			cout << "\nОшибочный ввод номера меню. Попробуйте еще раз...\n";
@@ -106,6 +107,7 @@ void CitiesGame::multiPlayer()
 void CitiesGame::singlePlayer()
 {
 	game.setOneOrMult(1);
+	clearFiles();
 	cntPlayers = 1;
 	players();
 }
@@ -135,16 +137,16 @@ void CitiesGame::players()
 	if (game.getOneOrMult() == 1 || cntPlayers == 0) {
 		listOfPlayers << name << ";1\n";
 		//cntPlayers = 1;
-	}	
-	if (cntPlayers!=0)
+	}
+	if (cntPlayers != 0)
 		listOfPlayers << name << ";0\n";
 
 	PlayerName = name;
 	listOfPlayers.close();
 	start();
 }
-void CitiesGame::start() {
 
+void CitiesGame::start() {
 	while (1) {
 		vector<pair<string, char>> players;
 		int flag = 0;
@@ -184,7 +186,9 @@ void CitiesGame::start() {
 			system("cls");
 			if (game.checkCity(answer) == 1)
 				mainMenu(1);
-			choice = 1;
+			if (game.checkCity(answer) == 2)
+				//////////////////////
+				choice = 1;
 		}
 		//считываем текущих игроков
 		fstream listOfPlayers(game.getDir() + "\\listOfPlayers.csv");
