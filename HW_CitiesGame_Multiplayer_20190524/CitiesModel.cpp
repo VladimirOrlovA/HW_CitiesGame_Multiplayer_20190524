@@ -68,7 +68,7 @@ int CitiesModel::checkCity(string answerCity) {
 		if (oneOrMult == 1) {
 			cout << e.what() << "\n\n !!! К сожалению Вы проиграли !!! \n\n";
 			Sleep(2000);
-			return 0;
+			return 1;
 		}
 		else {
 			cout << e.what() << "\n\n!!! Вы выбываете из игры. !!! \n\n";

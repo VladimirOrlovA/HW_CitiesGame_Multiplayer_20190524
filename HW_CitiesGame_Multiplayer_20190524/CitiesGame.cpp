@@ -55,7 +55,7 @@ void CitiesGame::mainMenu(int choice)
 		case 4:
 			system("cls");
 			choice = 0;
-			//clearFiles();
+			clearFiles();
 			cout << "\n\nСпасибо! До_свидания :) \n\n";
 			Sleep(2000);
 			exit(0);
