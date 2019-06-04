@@ -14,7 +14,7 @@ CitiesGame::CitiesGame(string dir)
 		cout << "Загрузка ";
 		for (size_t i = 0; i < x; i++)
 		{
-			cout << ">";
+			cout << ">>>";
 		}
 		Sleep(0);
 		x++;
@@ -107,14 +107,14 @@ void CitiesGame::multiPlayer()
 void CitiesGame::singlePlayer()
 {
 	game.setOneOrMult(1);
+	cntPlayers = 0;
 	clearFiles();
-	cntPlayers = 1;
 	players();
 }
 void CitiesGame::players()
 {
 	fstream listOfPlayers(game.getDir() + "\\listOfPlayers.csv", ios::in); ///////???????????????
-	int counter = 0;
+	int counter = 0; ///////////////////////
 	string name;
 	if (game.getOneOrMult() != 1) {
 		getline(listOfPlayers, name);
@@ -126,19 +126,20 @@ void CitiesGame::players()
 	}
 	else {
 		listOfPlayers.close();
-		listOfPlayers.open(game.getDir() + "\\listOfPlayers.csv", ios::out | ios::trunc);
+		//listOfPlayers.open(game.getDir() + "\\listOfPlayers.csv", ios::out | ios::trunc);
 	}
-
+	
+	//if (game.getOneOrMult() != 1)
 	cout << "\n\nВведите свое имя для начала игры! \n\n-> ";
-	cin.get();
 	getline(cin, name);
+	//cout<<cin.get();
 	listOfPlayers.close();
 	listOfPlayers.open(game.getDir() + "\\listOfPlayers.csv", ios::out | ios::app);
-	if (game.getOneOrMult() == 1 || cntPlayers == 0) {
+	if (game.getOneOrMult() == 1 && cntPlayers == 0) {
 		listOfPlayers << name << ";1\n";
-		//cntPlayers = 1;
+		cntPlayers = 1;
 	}
-	if (cntPlayers != 0)
+	if (game.getOneOrMult() != 1)
 		listOfPlayers << name << ";0\n";
 
 	PlayerName = name;
@@ -167,6 +168,7 @@ void CitiesGame::start() {
 							cout << "Ходит " << name << endl;
 					}
 					players.push_back(make_pair(name, c));
+					cout << "\n-----------Ход " << name << "-----------\n";
 				}
 			}
 			listOfPlayers.close();
@@ -174,6 +176,7 @@ void CitiesGame::start() {
 			system("cls");
 		}
 		//Значит мы ходим
+		
 		int choice = 0;
 		while (choice != 1) {
 			if (!empty(getLastCity())) {
@@ -181,14 +184,17 @@ void CitiesGame::start() {
 				cout << "Введите город на букву " << getLastLetter() << "\n-> ";
 			}
 			else cout << "Введите первый город \n-> ";
-			string answer;
-			getline(cin, answer);
+			string answerCity;
+			getline(cin, answerCity);
 			system("cls");
-			if (game.checkCity(answer) == 1)
+			choice = 1;
+			//game.checkCity(answerCity);
+			//////////////////////////
+			if (game.checkCity(answerCity) == 1)
 				mainMenu(1);
-			if (game.checkCity(answer) == 2)
+			//if (game.checkCity(answer) == 2)
 				//////////////////////
-				choice = 1;
+			
 		}
 		//считываем текущих игроков
 		fstream listOfPlayers(game.getDir() + "\\listOfPlayers.csv");
@@ -216,6 +222,7 @@ void CitiesGame::start() {
 		listOfPlayers.open(game.getDir() + "\\listOfPlayers.csv");
 		for (auto&i : players) {
 			listOfPlayers << i.first << ";" << i.second << endl;
+			cout << i.first << ";" << i.second << endl;
 		}
 		listOfPlayers.close();
 		system("cls");

@@ -34,10 +34,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="SourceFiles\usedCities.csv">
+    <None Include="\\asus_p52f\CityGameV\listOfPlayers.csv">
       <Filter>Файлы ресурсов</Filter>
     </None>
-    <None Include="SourceFiles\listOfPlayers.csv">
+    <None Include="\\asus_p52f\CityGameV\usedCities.csv">
       <Filter>Файлы ресурсов</Filter>
     </None>
   </ItemGroup>

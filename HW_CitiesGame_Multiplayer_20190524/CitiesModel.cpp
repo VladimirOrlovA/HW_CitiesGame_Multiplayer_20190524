@@ -13,7 +13,7 @@ int CitiesModel::checkCity(string answerCity) {
 			throw exception("\n\n  Город не найден. ");
 
 		vector<string> usedCities;
-		fstream file(dir + "\\usedCities.csv", ios::in); //////????????????????
+		fstream file(dir + "\\usedCities.csv", ios::in); // открываем на чтение
 
 		while (!file.eof()) {
 			string c;
@@ -22,17 +22,22 @@ int CitiesModel::checkCity(string answerCity) {
 				usedCities.push_back(c);
 		}
 		file.close();
+		
+		//answerCity;
+		//usedCities;
+		if (find(begin(usedCities), end(usedCities), answerCity)
+			!= end(usedCities))
+			throw exception("\n\nГород уже использовался! ");
+		
 		if (usedCities.size() == 0) {
 			file.open(dir + "\\usedCities.csv", ios::out);
 			file << answerCity;
 			file.close();
 			return 10;
 		}
-		//answerCity;
-		//usedCities;
-		if (find(begin(usedCities), end(usedCities), answerCity)
-			!= end(usedCities))
-			throw exception("\n\nГород уже использовался! ");
+		
+		
+		
 		//Алматы Тамбов
 		char c = *((usedCities.end() - 1)->end() - 1);
 		if (c == 'ь' || c == 'ы' || c == 'й' ||
@@ -53,26 +58,18 @@ int CitiesModel::checkCity(string answerCity) {
 		file.close();
 	}
 	catch (exception &e) {
-		if (cntExceptions == 0) {
-			cntExceptions++;
-			return 0;
-		}
-		if (cntExceptions == 1) {
-			cout << "\n\n Хорошо начали ;) \n\n Попробуйте еще разок! \n\n";
-			cntExceptions++;
-			Sleep(2000);
-			system("cls");
-			return 0;
-		}
-
+		
 		if (oneOrMult == 1) {
 			cout << e.what() << "\n\n !!! К сожалению Вы проиграли !!! \n\n";
 			Sleep(2000);
+			system("cls");
+			answerCity.clear();
 			return 1;
 		}
 		else {
 			cout << e.what() << "\n\n!!! Вы выбываете из игры. !!! \n\n";
 			Sleep(2000);
+			system("cls");
 			return 2;
 		}
 	}

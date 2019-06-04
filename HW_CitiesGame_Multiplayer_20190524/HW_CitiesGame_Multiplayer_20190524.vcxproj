@@ -124,8 +124,8 @@
     <ClCompile Include="CitiesGame.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="SourceFiles\listOfPlayers.csv" />
-    <None Include="SourceFiles\usedCities.csv" />
+    <None Include="\\asus_p52f\CityGameV\listOfPlayers.csv" />
+    <None Include="\\asus_p52f\CityGameV\usedCities.csv" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

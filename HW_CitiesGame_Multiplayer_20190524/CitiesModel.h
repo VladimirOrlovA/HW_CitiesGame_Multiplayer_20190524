@@ -11,7 +11,6 @@ class CitiesModel {
 	map<string, string> cities;
 	string dir;
 	int oneOrMult;
-	int cntExceptions = 0;
 public:
 	void setOneOrMult(int oneOrMult) { this->oneOrMult = oneOrMult;};
 	int getOneOrMult() const { return this->oneOrMult; };
